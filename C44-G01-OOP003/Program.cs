@@ -85,5 +85,93 @@
         - new: Compile-time polymorphism (early binding). The base method is hidden but still exists.
         */
         #endregion
+
+        #region Part 2 - Duration Class
+        public class Duration
+        {
+            public int Hours { get; private set; }
+            public int Minutes { get; private set; }
+            public int Seconds { get; private set; }
+
+            public Duration(int hours, int minutes, int seconds)
+            {
+                Hours = hours;
+                Minutes = minutes;
+                Seconds = seconds;
+                Normalize();
+            }
+
+            public Duration(int totalSeconds)
+            {
+                Hours = totalSeconds / 3600;
+                Minutes = (totalSeconds % 3600) / 60;
+                Seconds = totalSeconds % 60;
+            }
+
+            private void Normalize()
+            {
+                Minutes += Seconds / 60;
+                Seconds %= 60;
+                Hours += Minutes / 60;
+                Minutes %= 60;
+            }
+
+            public override string ToString()
+            {
+                if (Hours > 0)
+                    return $"Hours: {Hours}, Minutes: {Minutes}, Seconds: {Seconds}";
+                if (Minutes > 0)
+                    return $"Minutes: {Minutes}, Seconds: {Seconds}";
+                return $"Seconds: {Seconds}";
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is Duration other)
+                    return Hours == other.Hours && Minutes == other.Minutes && Seconds == other.Seconds;
+                return false;
+            }
+
+            public override int GetHashCode() => (Hours, Minutes, Seconds).GetHashCode();
+
+            public static Duration operator +(Duration a, Duration b)
+                => new Duration(a.Hours + b.Hours, a.Minutes + b.Minutes, a.Seconds + b.Seconds);
+
+            public static Duration operator +(Duration a, int seconds)
+                => a + new Duration(seconds);
+
+            public static Duration operator +(int seconds, Duration a)
+                => a + new Duration(seconds);
+
+            public static Duration operator ++(Duration a)
+                => new Duration(a.Hours, a.Minutes + 1, a.Seconds);
+
+            public static Duration operator --(Duration a)
+                => new Duration(a.Hours, a.Minutes - 1, a.Seconds);
+
+            public static Duration operator -(Duration a, Duration b)
+                => new Duration(a.Hours - b.Hours, a.Minutes - b.Minutes, a.Seconds - b.Seconds);
+
+            public static bool operator >(Duration a, Duration b)
+                => a.TotalSeconds() > b.TotalSeconds();
+
+            public static bool operator <(Duration a, Duration b)
+                => a.TotalSeconds() < b.TotalSeconds();
+
+            public static bool operator >=(Duration a, Duration b)
+                => a.TotalSeconds() >= b.TotalSeconds();
+
+            public static bool operator <=(Duration a, Duration b)
+                => a.TotalSeconds() <= b.TotalSeconds();
+
+            public static implicit operator bool(Duration a)
+                => a.Hours != 0 || a.Minutes != 0 || a.Seconds != 0;
+
+            public static explicit operator DateTime(Duration a)
+                => DateTime.Now.AddHours(a.Hours).AddMinutes(a.Minutes).AddSeconds(a.Seconds);
+
+            private int TotalSeconds() => Hours * 3600 + Minutes * 60 + Seconds;
+        }
+        #endregion
     }
 }
