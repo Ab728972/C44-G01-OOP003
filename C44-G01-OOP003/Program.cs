@@ -14,5 +14,20 @@
             public double Add(double a, double b) => a + b;
         }
         #endregion
+        #region Q2 - Rectangle Class
+        public class Rectangle
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+
+            public Rectangle() : this(0, 0) { }
+            public Rectangle(int size) : this(size, size) { }
+            public Rectangle(int width, int height)
+            {
+                Width = width;
+                Height = height;
+            }
+        }
+        #endregion
     }
 }
