@@ -63,5 +63,27 @@
             }
         }
         #endregion
+        #region Q5 - BaseClass and Derived Classes
+        public class BaseClass
+        {
+            public virtual void DisplayMessage() => Console.WriteLine("Message from BaseClass");
+        }
+
+        public class DerivedClass1 : BaseClass
+        {
+            public override void DisplayMessage() => Console.WriteLine("Message from DerivedClass1");
+        }
+
+        public class DerivedClass2 : BaseClass
+        {
+            public new void DisplayMessage() => Console.WriteLine("Message from DerivedClass2");
+        }
+
+        /*
+        Difference between override and new:
+        - override: Runtime polymorphism (late binding). The derived method completely replaces the base method.
+        - new: Compile-time polymorphism (early binding). The base method is hidden but still exists.
+        */
+        #endregion
     }
 }
